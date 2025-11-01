@@ -1,0 +1,20 @@
+mov ax, 100
+psh ax
+pop ax
+inc ax
+psh ax
+psh ax
+psh ax
+psh ax
+psh ax
+psh ax
+psh ax
+psh ax
+psh ax
+psh ax
+psh ax
+psh ax
+psh ax
+psh ax
+psh ax
+psh ax

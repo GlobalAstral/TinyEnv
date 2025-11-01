@@ -1,0 +1,20 @@
+{
+  "files.associations": {
+    "instructionregistry.h": "c",
+    "types.h": "c",
+    "bit": "c",
+    "compare": "c",
+    "limits": "c",
+    "new": "c",
+    "consoleutils.h": "c",
+    "fileloader.h": "c",
+    "constants.h": "c",
+    "string.h": "c",
+    "te_constants.h": "c",
+    "array": "c",
+    "functional": "c",
+    "tuple": "c",
+    "type_traits": "c",
+    "utility": "c"
+  }
+}

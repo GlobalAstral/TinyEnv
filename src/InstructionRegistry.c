@@ -11,6 +11,7 @@ Instruction* getInstruction(InsType type) {
   return &REGISTRY[type];
 }
 
+__attribute__((constructor))
 void registerInstructions() { 
   createInstruction(&REGISTRY[INS_NOP], INS_NOP, nop_exec);
   createInstruction(&REGISTRY[INS_MVA], INS_MVA, mva_exec);
@@ -39,6 +40,9 @@ void registerInstructions() {
   createInstruction(&REGISTRY[INS_JRB], INS_JRB, jrb_exec);
   createInstruction(&REGISTRY[INS_INC], INS_INC, inc_exec);
   createInstruction(&REGISTRY[INS_DEC], INS_DEC, dec_exec);
+  createInstruction(&REGISTRY[INS_LOW], INS_LOW, low_exec);
+  createInstruction(&REGISTRY[INS_HIG], INS_HIG, hig_exec);
+  createInstruction(&REGISTRY[INS_MRG], INS_MRG, mrg_exec);
 }
 
 bool nop_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
@@ -60,7 +64,7 @@ bool mva_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
     return false;
   }
 
-  u16 address = (rparam->val_type == INSP_LITERAL) ? rparam->value.literal : cpu->registers[rparam->value.reg];
+  uint_t address = (rparam->val_type == INSP_LITERAL) ? rparam->value.literal : cpu->registers[rparam->value.reg];
   if (address >= MEMORY_SIZE) {
     cpu->FLAG_ERR = 1;
     return false;
@@ -96,12 +100,12 @@ bool sto_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
     return false;
   }
 
-  u16 address = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
+  uint_t address = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
   if (address >= MEMORY_SIZE) {
     cpu->FLAG_ERR = 1;
     return false;
   }
-  u16 value = (rparam->val_type == INSP_LITERAL) ? rparam->value.literal : cpu->registers[rparam->value.reg];
+  uint_t value = (rparam->val_type == INSP_LITERAL) ? rparam->value.literal : cpu->registers[rparam->value.reg];
   cpu->memory[address] = value;
 
   return true;
@@ -119,7 +123,7 @@ bool add_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
   }
 
   Register* reg = &(cpu->registers[lparam->value.reg]);
-  u16 value = (rparam->val_type == INSP_LITERAL) ? rparam->value.literal : cpu->registers[rparam->value.reg];
+  uint_t value = (rparam->val_type == INSP_LITERAL) ? rparam->value.literal : cpu->registers[rparam->value.reg];
   *reg = *reg + value;
 
   return true;
@@ -137,7 +141,7 @@ bool sub_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
   }
 
   Register* reg = &(cpu->registers[lparam->value.reg]);
-  u16 value = (rparam->val_type == INSP_LITERAL) ? rparam->value.literal : cpu->registers[rparam->value.reg];
+  uint_t value = (rparam->val_type == INSP_LITERAL) ? rparam->value.literal : cpu->registers[rparam->value.reg];
   *reg = *reg - value;
 
   return true;
@@ -149,10 +153,10 @@ bool cmp_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
     return false;
   }
 
-  u16 value1 = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
-  u16 value2 = (rparam->val_type == INSP_LITERAL) ? rparam->value.literal : cpu->registers[rparam->value.reg];
+  uint_t value1 = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
+  uint_t value2 = (rparam->val_type == INSP_LITERAL) ? rparam->value.literal : cpu->registers[rparam->value.reg];
 
-  i16 sub = (value1 - value2);
+  int_t sub = (value1 - value2);
 
   cpu->FLAG_Z = sub == 0;
   cpu->FLAG_G = sub > 0;
@@ -167,7 +171,7 @@ bool jmp_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
     return false;
   }
 
-  u16 value = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
+  uint_t value = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
   cpu->IP = value;
   return true;
 }
@@ -178,7 +182,7 @@ bool jeq_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
     return false;
   }
 
-  u16 value = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
+  uint_t value = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
   if (cpu->FLAG_Z)
     cpu->IP = value;
   return true;
@@ -190,7 +194,7 @@ bool jls_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
     return false;
   }
 
-  u16 value = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
+  uint_t value = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
   if (cpu->FLAG_L)
     cpu->IP = value;
   return true;
@@ -202,7 +206,7 @@ bool jgr_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
     return false;
   }
 
-  u16 value = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
+  uint_t value = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
   if (cpu->FLAG_G)
     cpu->IP = value;
   return true;
@@ -214,7 +218,7 @@ bool jle_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
     return false;
   }
 
-  u16 value = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
+  uint_t value = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
   if (cpu->FLAG_L || cpu->FLAG_Z)
     cpu->IP = value;
   return true;
@@ -226,7 +230,7 @@ bool jge_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
     return false;
   }
 
-  u16 value = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
+  uint_t value = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
   if (cpu->FLAG_G || cpu->FLAG_Z)
     cpu->IP = value;
   return true;
@@ -238,7 +242,7 @@ bool jne_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
     return false;
   }
 
-  u16 value = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
+  uint_t value = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
   if (!cpu->FLAG_Z)
     cpu->IP = value;
   return true;
@@ -255,7 +259,7 @@ bool and_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
     return false;
   }
 
-  u16 value = (rparam->val_type == INSP_LITERAL) ? rparam->value.literal : cpu->registers[rparam->value.reg];
+  uint_t value = (rparam->val_type == INSP_LITERAL) ? rparam->value.literal : cpu->registers[rparam->value.reg];
   
   Register* reg = &(cpu->registers[lparam->value.reg]);
   *reg = *reg & value;
@@ -290,7 +294,7 @@ bool xor_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
     return false;
   }
 
-  u16 value = (rparam->val_type == INSP_LITERAL) ? rparam->value.literal : cpu->registers[rparam->value.reg];
+  uint_t value = (rparam->val_type == INSP_LITERAL) ? rparam->value.literal : cpu->registers[rparam->value.reg];
   
   Register* reg = &(cpu->registers[lparam->value.reg]);
   *reg = *reg ^ value;
@@ -324,7 +328,7 @@ bool psh_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
     return false;
   }
 
-  u16 value = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
+  uint_t value = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
   
   Register* sp = &(cpu->registers[RG_SP]);
   cpu->memory[*sp] = value;
@@ -373,7 +377,7 @@ bool shl_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
   }
   Register* reg = &(cpu->registers[lparam->value.reg]);
 
-  u16 value = (rparam->val_type == INSP_LITERAL) ? rparam->value.literal : cpu->registers[rparam->value.reg];
+  uint_t value = (rparam->val_type == INSP_LITERAL) ? rparam->value.literal : cpu->registers[rparam->value.reg];
 
   *reg = *reg << value;
 
@@ -391,7 +395,7 @@ bool shr_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
   }
   Register* reg = &(cpu->registers[lparam->value.reg]);
 
-  u16 value = (rparam->val_type == INSP_LITERAL) ? rparam->value.literal : cpu->registers[rparam->value.reg];
+  uint_t value = (rparam->val_type == INSP_LITERAL) ? rparam->value.literal : cpu->registers[rparam->value.reg];
 
   *reg = *reg >> value;
 
@@ -404,7 +408,7 @@ bool jrf_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
     return false;
   }
 
-  u16 value = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
+  uint_t value = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
   cpu->IP += value;
   return true;
 }
@@ -415,7 +419,7 @@ bool jrb_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
     return false;
   }
 
-  u16 value = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
+  uint_t value = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
   cpu->IP += value;
   return true;
 }
@@ -449,5 +453,59 @@ bool dec_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
 
   Register* reg = &cpu->registers[lparam->value.reg];
   *reg = *reg - 1;
+  return true;
+}
+
+bool low_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
+  if (lparam->val_type == INSP_NULL || rparam->val_type == INSP_NULL) {
+    cpu->FLAG_ERR = 1;
+    return false;
+  }
+  if (lparam->val_type == INSP_LITERAL) {
+    cpu->FLAG_ERR = 1;
+    return false;
+  }
+  Register* reg = &(cpu->registers[lparam->value.reg]);
+
+  uint_t value = (rparam->val_type == INSP_LITERAL) ? rparam->value.literal : cpu->registers[rparam->value.reg];
+
+  *reg = value & 0xFF;
+
+  return true;
+}
+
+bool hig_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
+  if (lparam->val_type == INSP_NULL || rparam->val_type == INSP_NULL) {
+    cpu->FLAG_ERR = 1;
+    return false;
+  }
+  if (lparam->val_type == INSP_LITERAL) {
+    cpu->FLAG_ERR = 1;
+    return false;
+  }
+  Register* reg = &(cpu->registers[lparam->value.reg]);
+
+  uint_t value = (rparam->val_type == INSP_LITERAL) ? rparam->value.literal : cpu->registers[rparam->value.reg];
+
+  *reg = (value >> INT_SIZE / 2) & 0xFF;
+
+  return true;
+}
+
+bool mrg_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
+  if (lparam->val_type == INSP_NULL || rparam->val_type == INSP_NULL) {
+    cpu->FLAG_ERR = 1;
+    return false;
+  }
+
+  if (lparam->val_type != INSP_REGISTER) {
+    cpu->FLAG_ERR = 1;
+    return false;
+  }
+
+  Register* reg = &(cpu->registers[lparam->value.reg]);
+  uint_t value = (rparam->val_type == INSP_LITERAL) ? rparam->value.literal : cpu->registers[rparam->value.reg];
+  *reg = (*reg << 8) | value;
+
   return true;
 }

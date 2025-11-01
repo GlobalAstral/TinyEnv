@@ -116,6 +116,15 @@ int printII(InstructionInstance *instance) {
     case INS_DEC :
       str = "dec ";
       break;
+    case INS_LOW :
+      str = "low ";
+      break;
+    case INS_HIG :
+      str = "hig ";
+      break;
+    case INS_MRG :
+      str = "mrg ";
+      break;
   };
   chars += printf("%s", str);
   if (instance->lparam.val_type != INSP_NULL) {
@@ -151,6 +160,9 @@ int parametersNeeded(InsType instruction) {
     case INS_CMP :
     case INS_AND :
     case INS_XOR :
+    case INS_LOW :
+    case INS_HIG :
+    case INS_MRG :
       return 2;
     case INS_JEQ :
     case INS_JGE :

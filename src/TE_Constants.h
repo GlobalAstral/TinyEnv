@@ -4,8 +4,25 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-typedef unsigned short u16;
-typedef u16 Literal;
+#define INT_SIZE 16
+
+#if INT_SIZE == 8
+  #define SIGNED_TYPE char
+#elif INT_SIZE == 16
+  #define SIGNED_TYPE short
+#elif INT_SIZE == 32
+  #define SIGNED_TYPE int
+#elif INT_SIZE == 64
+  #define SIGNED_TYPE long long
+#endif
+
+typedef unsigned SIGNED_TYPE uint_t;
+typedef SIGNED_TYPE int_t;
+
+#undef SIGNED_TYPE
+
+typedef unsigned char byte;
+typedef uint_t Literal;
 
 //!   REGISTERS
 typedef enum {
@@ -29,7 +46,8 @@ typedef enum {
   INS_JGE, INS_JNE, INS_AND, INS_NOT,
   INS_XOR, INS_SWP, INS_PSH, INS_POP,
   INS_HLT, INS_SHL, INS_SHR, INS_JRF,
-  INS_JRB, INS_INC, INS_DEC, __INS_COUNT
+  INS_JRB, INS_INC, INS_DEC, INS_LOW,
+  INS_HIG, INS_MRG, __INS_COUNT
 } InsType;
 static char* INSTRUCTIONS[] = {
   "nop", "mva", "mov", "sto", 
@@ -38,7 +56,8 @@ static char* INSTRUCTIONS[] = {
   "jge", "jne", "and", "not", 
   "xor", "swp", "psh", "pop", 
   "hlt", "shl", "shr", "jrf",
-  "jrb", "inc", "dec"
+  "jrb", "inc", "dec", "low",
+  "hig", "mrg"
 };
 static char* instructionSelectOptions[__INS_COUNT+1] = {0};
 

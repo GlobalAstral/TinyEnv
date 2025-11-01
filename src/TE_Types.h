@@ -11,11 +11,7 @@
 #define STACK_START (MEMORY_SIZE-STACK_SIZE)
 #define STACK_END (MEMORY_SIZE)
 
-typedef unsigned char byte;
-
-typedef short i16;
-typedef u16 Register;
-
+typedef uint_t Register;
 
 int printRegister(Reg rg);
 

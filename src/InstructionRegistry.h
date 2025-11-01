@@ -34,3 +34,6 @@ bool jrf_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam);
 bool jrb_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam);
 bool inc_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam);
 bool dec_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam);
+bool low_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam);
+bool hig_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam);
+bool mrg_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam);

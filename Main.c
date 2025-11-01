@@ -46,7 +46,7 @@ int drawStack(Event* event, CPU* cpu) {
     if (spaces != 0) {
       printSpaces(spaces);
     }
-    printf("%d|", cpu->memory[i]);
+    printf("%u|", cpu->memory[i]);
     if (i == bp && bp == sp)
       printf("<-");
     else if (i == bp)
@@ -65,7 +65,7 @@ int drawCode(Event* event, CPU* cpu, List* code, int padding) {
   for (int i = index; i < index+CODE_MAX_SHOWN; i++) {
     if (i >= code->size) break;
     setCursorPos(padding+1, y);
-    int chars = printf("| %d ", i+1);
+    int chars = printf("| %u ", i+1);
     chars += printII(&(code->head[i]));
     if (cpu->IP == i) {
       chars += printf(" < ");
@@ -108,7 +108,7 @@ int drawFlags(Event* event, CPU* cpu, int padding) {
   
   bool flags[] = {cpu->FLAG_Z, cpu->FLAG_G, cpu->FLAG_L, cpu->FLAG_ERR, cpu->FLAG_HLT};
   for (int i = 0; i < sizeof(FLAGS) / sizeof(char*); i++) {
-    int chars = printf("%s: %d", FLAGS[i], flags[i]);
+    int chars = printf("%s: %u", FLAGS[i], flags[i]);
     moveCursor(-chars, 1);
     if (chars > new_padding)
       new_padding = chars;
@@ -184,7 +184,6 @@ bool indexMenuEvent(Event* event) {
 
   return false;
 }
-
 bool pathMenuEvent(Event* event) {
   if (event->eventType != KEY_DOWN_EVENT) return false;
   KeyCode code = event->params.keyCode;
@@ -193,8 +192,8 @@ bool pathMenuEvent(Event* event) {
     char cpy[size];
     memcpy(cpy, givenPath, size);
     string_list* temp = split(cpy, size, '.');
-    if (temp->size != 2) return false;
-    if (strcmp(temp->buf[1], "tne") != 0) return false;
+    if (temp->size < 2 || temp->size > 3) return false;
+    if (strcmp(temp->buf[temp->size-1], "tne") != 0) return false;
     if (!fileExists(givenPath)) return false;
     selectedFile = fopen(givenPath, selectedFileMode);
     memset(givenPath, 0, sizeof(givenPath) / sizeof(givenPath[0]));
@@ -296,7 +295,6 @@ bool mainMenuInput(int selection, const MenuOption option) {
 }
 
 int main(int argc, char** argv) {
-  registerInstructions();
   Originals originals;
   setRawMode(&originals);
 

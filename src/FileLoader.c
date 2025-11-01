@@ -27,6 +27,7 @@ void parseFileBuffer(char *buf, size_t size, List* code) {
   listReset(code);
   for (int i = 0; i < splitted->size; i++) {
     char* line = splitted->buf[i];
+    if (strcmp(trim(line), "") == 0) continue;
     InstructionInstance instance;
     instance.lparam.val_type = INSP_NULL;
     instance.rparam.val_type = INSP_NULL;

@@ -311,7 +311,6 @@ int main(int argc, char** argv) {
   createMenuWithTitle(indexGet, "Insert Index (Zero Based)", indexGetOptions);
   createMenuWithTitle(pathGet, "Insert Path", pathGetOptions);
 
-  //TODO ALSO ONCE YOU FIGURED OUT ALL THE INSTRUCTIONS START DOING SUBLIME TEXT EXTENSION
   Event event;
   while (running) {
     getInput(&event);

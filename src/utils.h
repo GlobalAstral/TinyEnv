@@ -34,11 +34,7 @@ typedef struct {
 } string_list;
 
 string_list* new_string_list(int initsize);
-
 string_list* split(char* buf, size_t size, char sep);
-
 char* ltrim(char *s);
-
 char* rtrim(char* s);
-
 char* trim(char* s);

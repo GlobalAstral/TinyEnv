@@ -189,6 +189,13 @@ bool pathMenuEvent(Event* event) {
   if (event->eventType != KEY_DOWN_EVENT) return false;
   KeyCode code = event->params.keyCode;
   if (code.key == VK_RETURN) {
+    size_t size = strlen(givenPath)+1;
+    char cpy[size];
+    memcpy(cpy, givenPath, size);
+    string_list* temp = split(cpy, size, '.');
+    if (temp->size != 2) return false;
+    if (strcmp(temp->buf[1], "tne") != 0) return false;
+    if (!fileExists(givenPath)) return false;
     selectedFile = fopen(givenPath, selectedFileMode);
     memset(givenPath, 0, sizeof(givenPath) / sizeof(givenPath[0]));
     cursor = 0;

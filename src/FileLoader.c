@@ -88,3 +88,7 @@ int string2Param(char *s, InstructionParam *param) {
   param->value.literal = atoi(s);
   return 0;
 }
+
+bool fileExists(char *fname) {
+  return access(fname, F_OK) == 0;
+}

@@ -5,6 +5,8 @@
 #include <ctype.h>
 
 #define INT_SIZE 16
+#define HELP_PAGE_ROWS 18
+#define PAGES_LEN (sizeof(HELP_PAGES) / sizeof(HELP_PAGE))
 
 #if INT_SIZE == 8
   #define SIGNED_TYPE char
@@ -68,12 +70,44 @@ typedef enum {
   INSP_NULL
 } ParamValType;
 static char* paramTypeSelectOptions[] = {"REGISTER", "LITERAL", "UNDO"};
-
-//!   OTHER
 typedef union {
   Reg reg;
   Literal literal;
 } ParamValue;
+
+//!   HELP PAGES
+typedef char* HELP_PAGE[HELP_PAGE_ROWS];
+
+static char* HELP_PAGES_TITLES[] = {
+  "Introduction and Controls"
+};
+
+static HELP_PAGE HELP_PAGES[] = {
+  {
+    "THE GUI IS DEPRECATED. IT IS HIGHLY",
+    "RECOMMENDED TO USE EXTERNAL FILES!!"
+    "This Microprocessor is a simplified",
+    "version of the real microprocessors."
+    "Each register is 16 bits wide.",
+    "You can find registers on the next chapters."
+    "The memory is organized in 256 bytes,",
+    "of which 64 are dedicated to the stack."
+    "In the memory the bytes are shown in HEX,",
+    "while in the stack they are shown in decimal."
+    "There are five flags that will be covered in the next chapters.",
+    "You open this pages by pressing H.",
+    "CONTROLS:",
+    "E: Opens GUI (DEPRECATED)",
+    "SPACE: Starts the simulation.",
+    "^SPACE: Steps simulation one instruction at a time.",
+    "A/D: Previous/Next Page.",
+    "W/S : Scroll up/down shown code.",
+    "^W/^S: Scroll up/down shown stack.",
+  }
+};
+
+//!   OTHER
+
 static char* toLower(char* s) {
   size_t size = strlen(s)+1;
   char* ret = (char*) malloc(size);

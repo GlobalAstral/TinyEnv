@@ -303,7 +303,6 @@ void helpDisplay() {
   helpMenu.optionsSize = sizeof(HELP_PAGES[pageIndex]) / sizeof(HELP_PAGES[pageIndex][0]);
   printMenu(&helpMenu);
 }
-//TODO SISTEMA
 
 bool helpEvent(Event* event) {
   if (event->eventType != KEY_DOWN_EVENT) return false;
@@ -399,7 +398,7 @@ int main(int argc, char** argv) {
           drawn = false;
         }
       } else if (keycode.key == VK_H) {
-        menuLoop(&helpMenu, helpDisplay, NULL, helpEvent);
+        // menuLoop(&helpMenu, helpDisplay, NULL, helpEvent);
       }
     }
 

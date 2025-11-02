@@ -296,6 +296,19 @@ bool mainMenuInput(int selection, const MenuOption option) {
   return false;
 }
 
+void displayHelp(int pageIndex, bool* drawn) {
+  cls();
+
+  const int padding = 5;
+  POINT consoleSize = getConsoleSize();
+  consoleSize.x -= padding;
+  consoleSize.y -= padding;
+  RECT box = printBoxWithTitle(HELP_PAGES_TITLES[pageIndex], consoleSize.x, consoleSize.y);
+  printInBox(box, HELP_PAGES[pageIndex]);
+
+  *drawn = true;
+}
+
 int main(int argc, char** argv) {
   Originals originals;
   setRawMode(&originals);
@@ -374,7 +387,28 @@ int main(int argc, char** argv) {
           drawn = false;
         }
       } else if (keycode.key == VK_H) {
-        // menuLoop(&helpMenu, helpDisplay, NULL, helpEvent);
+        drawn = false;
+        Event ev;
+        int pageIndex;
+        while (true) {
+          if (!drawn)
+            displayHelp(pageIndex, &drawn);
+
+          getInput(&ev);
+          if (ev.eventType == KEY_DOWN_EVENT) {
+            if (ev.params.keyCode.key == VK_RETURN || ev.params.keyCode.key == VK_H)
+              break;
+            
+            if (ev.params.keyCode.key == VK_A && pageIndex > 0) {
+              pageIndex--;
+              drawn = false;
+            } else if (ev.params.keyCode.key == VK_D && pageIndex < PAGES_LEN - 1) {
+              pageIndex++;
+              drawn = false;
+            }
+          }
+        }
+        drawn = false;
       }
     }
 

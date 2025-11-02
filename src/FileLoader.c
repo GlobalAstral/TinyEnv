@@ -27,8 +27,8 @@ void parseFileBuffer(char *buf, size_t size, IIList* code) {
   listReset(code);
   size_t label_amount = 0;
   for (int i = 0; i < splitted->size; i++) {
-    char* line = splitted->buf[i];
-    if (line[0] != '.') continue;
+    char* line = trim(splitted->buf[i]);
+    if (line[0] != LABEL_PREFIX) continue;
     label_amount++;
   }
 
@@ -36,12 +36,12 @@ void parseFileBuffer(char *buf, size_t size, IIList* code) {
   int values[label_amount];
   int map_index = 0;
   for (int i = 0, effective_i = 0; i < splitted->size; i++, effective_i++) {
-    char* line = splitted->buf[i];
-    if (strcmp(trim(line), "") == 0) {
+    char* line = trim(splitted->buf[i]);
+    if (strcmp(trim(line), "") == 0 || line[0] == COMMENT_PREFIX) {
       effective_i--;
       continue;
     }
-    if (line[0] != '.') continue;
+    if (line[0] != LABEL_PREFIX) continue;
     char* labelName = line + 1;
     keys[map_index] = labelName;
     values[map_index] = effective_i;
@@ -50,8 +50,8 @@ void parseFileBuffer(char *buf, size_t size, IIList* code) {
   }
 
   for (int i = 0; i < splitted->size; i++) {
-    char* line = splitted->buf[i];
-    if (strcmp(trim(line), "") == 0 || line[0] == '.') continue;
+    char* line = trim(splitted->buf[i]);
+    if (strcmp(trim(line), "") == 0 || line[0] == LABEL_PREFIX || line[0] == COMMENT_PREFIX) continue;
     InstructionInstance instance;
     instance.lparam.val_type = INSP_NULL;
     instance.rparam.val_type = INSP_NULL;
@@ -95,7 +95,7 @@ bool substrEqual(char *s, size_t start, size_t end, char *s2) {
 }
 
 int string2Param(char *s, InstructionParam *param, char** keys, int* values, size_t size) {
-  if (s[0] == '.') {
+  if (s[0] == LABEL_PREFIX) {
     char* label = s+1;
     int index = -1;
     for (int i = 0; i < size; i++) {

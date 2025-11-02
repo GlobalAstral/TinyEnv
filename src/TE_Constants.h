@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#define LABEL_PREFIX "@"
+#define LABEL_PREFIX "."
 #define COMMENT_PREFIX "#"
 #define CHAR(T) T[0]
 

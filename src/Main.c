@@ -405,6 +405,11 @@ int main(int argc, char** argv) {
             } else if (ev.params.keyCode.key == VK_D && pageIndex < PAGES_LEN - 1) {
               pageIndex++;
               drawn = false;
+            } else if (isChar(ev.params.keyCode) && ev.params.keyCode.asChar >= '0' && ev.params.keyCode.asChar <= '9') {
+              int page = ev.params.keyCode.asChar - '0';
+              if (page < 0 || page >= PAGES_LEN) continue;
+              pageIndex = page;
+              drawn = false;
             }
           }
         }

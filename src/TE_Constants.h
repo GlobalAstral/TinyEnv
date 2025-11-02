@@ -82,11 +82,21 @@ typedef union {
 //!   HELP PAGES
 
 static char* HELP_PAGES_TITLES[] = {
-  "Introduction", "Controls", "Parser Features", "Registers", "Flags", "Instructions", "Instructions", "Semantics", 
-  "Instruction Usage", "Instruction Usage"
+  "Table of Contents", "Introduction", "Controls", "Parser Features", "Registers", "Flags", "Instructions", "Instructions", 
+  "Semantics", "Instruction Usage", "Instruction Usage"
 };
 
 static char* HELP_PAGES[] = {
+  "Table of Contents:\n"
+  "\t1. Introduction\n"
+  "\t2. Controls\n"
+  "\t3. Parser Features\n"
+  "\t4. Registers\n"
+  "\t5. Flags\n"
+  "\t6. Instructions\n"
+  "\t8. Semantics\n"
+  "\t9. Instruction Usage\n",
+
   "THE GUI IS DEPRECATED. IT IS HIGHLY RECOMMENDED TO USE EXTERNAL FILES!!\n"
   "This Microprocessor is a simplified version of the real microprocessors.\n"
   "Each register is 16 bits wide. You can find registers on the next chapters.\n"
@@ -95,18 +105,19 @@ static char* HELP_PAGES[] = {
   "There are five flags that will be covered in the next chapters.\n"
   "There are some additional features when loading files that will be covered in the next chapters",
 
-  " H: Open and close this page.\n"
-  "^Q: Exit.\n"
-  " E: Opens GUI (DEPRECATED)\n"
-  " SPACE: Starts the simulation.\n"
-  "^SPACE: Steps simulation one instruction at a time.\n"
-  " A: Previous Page.\n"
-  " D: Next Page.\n"
-  " W: Scroll up in shown code.\n"
-  " S: Scroll down in shown code.\n"
-  "^W: Scroll up in shown stack.\n"
-  "^S: Scroll down in shown stack.\n"
-  "^R: Scroll down in shown stack.\n",
+  "  H: Open and close this page.\n"
+  " ^Q: Exit.\n"
+  "  E: Opens GUI (DEPRECATED)\n"
+  "  SPACE: Starts the simulation.\n"
+  " ^SPACE: Steps simulation one instruction at a time.\n"
+  "  A: Previous Page.\n"
+  "  D: Next Page.\n"
+  "1-9: Go to Page.\n"
+  "  W: Scroll up in shown code.\n"
+  "  S: Scroll down in shown code.\n"
+  " ^W: Scroll up in shown stack.\n"
+  " ^S: Scroll down in shown stack.\n"
+  " ^R: Scroll down in shown stack.\n",
 
   "The Parser for .tne files offers some additional features. Also, trailing spaces are ignored.\n"
   "LABELS:\n"

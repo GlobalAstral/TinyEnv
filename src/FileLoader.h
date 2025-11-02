@@ -6,9 +6,8 @@
 #include <unistd.h>
 #include <utils.h>
 #include <InstructionRegistry.h>
+#include <TE_Constants.h>
 
-#define LABEL_PREFIX '@'
-#define COMMENT_PREFIX '#'
 
 size_t allocateFileBuffer(FILE* f, char** buf);
 void initializeFileBuffer(FILE* f, char* buf);

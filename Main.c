@@ -58,7 +58,7 @@ int drawStack(Event* event, CPU* cpu) {
   return maxDigits+4;
 }
 
-int drawCode(Event* event, CPU* cpu, List* code, int padding) {
+int drawCode(Event* event, CPU* cpu, IIList* code, int padding) {
   int y = 0;
   int new_padding = -1;
   int index = codeRenderIndex;
@@ -116,7 +116,7 @@ int drawFlags(Event* event, CPU* cpu, int padding) {
   return (new_padding < 0) ? padding : new_padding + padding;
 }
 
-void handleRendering(Event* event, CPU* cpu, List* code, bool* drawn) {
+void handleRendering(Event* event, CPU* cpu, IIList* code, bool* drawn) {
   cls();
   int padding = drawStack(event, cpu);
   padding = drawCode(event, cpu, code, padding) + 5;
@@ -128,7 +128,7 @@ void handleRendering(Event* event, CPU* cpu, List* code, bool* drawn) {
 
 Menu mainMenu;
 
-List code;
+IIList code;
 bool running = true;
 bool needsIndex = false;
 
@@ -138,6 +138,7 @@ Menu registerSelect;
 Menu literalGet;
 Menu indexGet;
 Menu pathGet;
+Menu helpMenu;
 char givenLiteral[6];
 char givenIndex[10];
 char givenPath[260];
@@ -145,6 +146,7 @@ FILE* selectedFile;
 char* selectedFileMode;
 int selectedIndex = -1;
 int cursor = 0;
+int pageIndex = 0;
 InstructionParam parameter;
 
 bool inputMenuEvent(Event* event) {
@@ -294,6 +296,31 @@ bool mainMenuInput(int selection, const MenuOption option) {
   return false;
 }
 
+void helpDisplay() {
+  cls();
+  helpMenu.title = HELP_PAGES_TITLES[pageIndex];
+  helpMenu.options = HELP_PAGES[pageIndex];
+  helpMenu.optionsSize = sizeof(HELP_PAGES[pageIndex]) / sizeof(HELP_PAGES[pageIndex][0]);
+  printMenu(&helpMenu);
+}
+//TODO SISTEMA
+
+bool helpEvent(Event* event) {
+  if (event->eventType != KEY_DOWN_EVENT) return false;
+  KeyCode code = event->params.keyCode;
+
+  if (code.key == VK_A) {
+    if (pageIndex > 0)
+      pageIndex--;
+  } else if (code.key == VK_D) {
+    if (PAGES_LEN - 1)
+      pageIndex++;
+  } else if (code.key == VK_RETURN)
+    return true;
+
+  return false;
+}
+
 int main(int argc, char** argv) {
   Originals originals;
   setRawMode(&originals);
@@ -307,6 +334,7 @@ int main(int argc, char** argv) {
   MenuOption literalGetOptions[] = {givenLiteral};
   MenuOption indexGetOptions[] = {givenIndex};
   MenuOption pathGetOptions[] = {givenPath};
+  MenuOption helpMenuOptions[] = {};
 
   createMenuWithTitle(mainMenu, "Main Menu", mainMenuOptions);
   createMenuWithTitle(instructionSelect, "Select Instruction", instructionSelectOptions);
@@ -315,6 +343,7 @@ int main(int argc, char** argv) {
   createMenuWithTitle(literalGet, "Insert Literal", literalGetOptions);
   createMenuWithTitle(indexGet, "Insert Index (Zero Based)", indexGetOptions);
   createMenuWithTitle(pathGet, "Insert Path", pathGetOptions);
+  createMenu(helpMenu, helpMenuOptions);
 
   Event event;
   while (running) {
@@ -369,6 +398,8 @@ int main(int argc, char** argv) {
           stackRenderIndex++;
           drawn = false;
         }
+      } else if (keycode.key == VK_H) {
+        menuLoop(&helpMenu, helpDisplay, NULL, helpEvent);
       }
     }
 

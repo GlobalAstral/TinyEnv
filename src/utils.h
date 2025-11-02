@@ -19,14 +19,14 @@ typedef struct {
   size_t size;
   size_t capacity;
   bool uninit;
-} List;
+} IIList;
 
-List newList();
-int listPush(List* lst, InstructionInstance item);
-int listPop(List* lst);
-int listInsert(List* lst, InstructionInstance item, int index);
-int listRemove(List* lst, int index);
-void listReset(List* lst);
+IIList newList();
+int listPush(IIList* lst, InstructionInstance item);
+int listPop(IIList* lst);
+int listInsert(IIList* lst, InstructionInstance item, int index);
+int listRemove(IIList* lst, int index);
+void listReset(IIList* lst);
 
 typedef struct {
   char** buf;

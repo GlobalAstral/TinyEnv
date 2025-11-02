@@ -5,8 +5,8 @@ void printSpaces(int amount) {
     putchar(' ');
 }
 
-List newList() {
-  List lst;
+IIList newList() {
+  IIList lst;
   lst.capacity = LIST_CAPACITY_STEP;
   lst.size = 0;
   lst.head = allocate(InstructionInstance, LIST_CAPACITY_STEP);
@@ -14,7 +14,7 @@ List newList() {
   return lst;
 }
 
-int listPush(List *lst, InstructionInstance item) {
+int listPush(IIList *lst, InstructionInstance item) {
   if (lst->uninit)
     return 1;
   if (lst->size >= lst->capacity) {
@@ -26,7 +26,7 @@ int listPush(List *lst, InstructionInstance item) {
   return 0;
 }
 
-int listPop(List *lst) {
+int listPop(IIList *lst) {
   if (lst->uninit) return 1;
   if (lst->size <= 0) return 1;
 
@@ -36,7 +36,7 @@ int listPop(List *lst) {
   return 0;
 }
 
-int listInsert(List *lst, InstructionInstance item, int index) {
+int listInsert(IIList *lst, InstructionInstance item, int index) {
   if (lst->uninit) return 1;
   if (index < 0 || index > lst->size) return 1;
   if (index == lst->size) return listPush(lst, item);
@@ -51,7 +51,7 @@ int listInsert(List *lst, InstructionInstance item, int index) {
   return 0;
 }
 
-int listRemove(List *lst, int index) {
+int listRemove(IIList *lst, int index) {
   if (lst->uninit) return 1;
   if (index < 0 || index >= lst->size) return 1;
 
@@ -61,7 +61,7 @@ int listRemove(List *lst, int index) {
   return 0;
 }
 
-void listReset(List *lst) {
+void listReset(IIList *lst) {
   lst->capacity = LIST_CAPACITY_STEP;
   resize(InstructionInstance, lst->head, lst->capacity);
   lst->size = 0;

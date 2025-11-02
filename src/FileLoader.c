@@ -21,7 +21,7 @@ void initializeFileBuffer(FILE *f, char *buf) {
   buf[base] = 0;
 }
 
-void parseFileBuffer(char *buf, size_t size, List* code) {
+void parseFileBuffer(char *buf, size_t size, IIList* code) {
   string_list* splitted = split(buf, size, '\n');
   
   listReset(code);

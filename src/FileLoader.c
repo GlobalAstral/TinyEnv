@@ -46,6 +46,7 @@ void parseFileBuffer(char *buf, size_t size, IIList* code) {
     keys[map_index] = labelName;
     values[map_index] = effective_i;
     map_index++;
+    effective_i--;
   }
 
   for (int i = 0; i < splitted->size; i++) {

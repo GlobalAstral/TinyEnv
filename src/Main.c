@@ -296,30 +296,6 @@ bool mainMenuInput(int selection, const MenuOption option) {
   return false;
 }
 
-void helpDisplay() {
-  cls();
-  helpMenu.title = HELP_PAGES_TITLES[pageIndex];
-  helpMenu.options = HELP_PAGES[pageIndex];
-  helpMenu.optionsSize = sizeof(HELP_PAGES[pageIndex]) / sizeof(HELP_PAGES[pageIndex][0]);
-  printMenu(&helpMenu);
-}
-
-bool helpEvent(Event* event) {
-  if (event->eventType != KEY_DOWN_EVENT) return false;
-  KeyCode code = event->params.keyCode;
-
-  if (code.key == VK_A) {
-    if (pageIndex > 0)
-      pageIndex--;
-  } else if (code.key == VK_D) {
-    if (PAGES_LEN - 1)
-      pageIndex++;
-  } else if (code.key == VK_RETURN)
-    return true;
-
-  return false;
-}
-
 int main(int argc, char** argv) {
   Originals originals;
   setRawMode(&originals);

@@ -5,8 +5,7 @@
 #include <ctype.h>
 
 #define INT_SIZE 16
-#define HELP_PAGE_ROWS 18
-#define PAGES_LEN (sizeof(HELP_PAGES) / sizeof(HELP_PAGE))
+#define PAGES_LEN (sizeof(HELP_PAGES) / sizeof(HELP_PAGES[0]))
 
 #if INT_SIZE == 8
   #define SIGNED_TYPE char
@@ -76,34 +75,31 @@ typedef union {
 } ParamValue;
 
 //!   HELP PAGES
-typedef char* HELP_PAGE[HELP_PAGE_ROWS];
 
 static char* HELP_PAGES_TITLES[] = {
   "Introduction and Controls"
 };
 
-static HELP_PAGE HELP_PAGES[] = {
-  {
-    "THE GUI IS DEPRECATED. IT IS HIGHLY",
-    "RECOMMENDED TO USE EXTERNAL FILES!!"
-    "This Microprocessor is a simplified",
-    "version of the real microprocessors."
-    "Each register is 16 bits wide.",
-    "You can find registers on the next chapters."
-    "The memory is organized in 256 bytes,",
-    "of which 64 are dedicated to the stack."
-    "In the memory the bytes are shown in HEX,",
-    "while in the stack they are shown in decimal."
-    "There are five flags that will be covered in the next chapters.",
-    "You open this pages by pressing H.",
-    "CONTROLS:",
-    "E: Opens GUI (DEPRECATED)",
-    "SPACE: Starts the simulation.",
-    "^SPACE: Steps simulation one instruction at a time.",
-    "A/D: Previous/Next Page.",
-    "W/S : Scroll up/down shown code.",
-    "^W/^S: Scroll up/down shown stack.",
-  }
+static char* HELP_PAGES[] = {
+  "THE GUI IS DEPRECATED. IT IS HIGHLY\n"
+  "RECOMMENDED TO USE EXTERNAL FILES!!\n"
+  "This Microprocessor is a simplified\n"
+  "version of the real microprocessors.\n"
+  "Each register is 16 bits wide.\n"
+  "You can find registers on the next chapters.\n"
+  "The memory is organized in 256 bytes,\n"
+  "of which 64 are dedicated to the stack.\n"
+  "In the memory the bytes are shown in HEX,\n"
+  "while in the stack they are shown in decimal.\n"
+  "There are five flags that will be covered in the next chapters.\n"
+  "You open this pages by pressing H.\n"
+  "CONTROLS:\n"
+  "E: Opens GUI (DEPRECATED)\n"
+  "SPACE: Starts the simulation.\n"
+  "^SPACE: Steps simulation one instruction at a time.\n"
+  "A/D: Previous/Next Page.\n"
+  "W/S : Scroll up/down shown code.\n"
+  "^W/^S: Scroll up/down shown stack.\n"
 };
 
 //!   OTHER

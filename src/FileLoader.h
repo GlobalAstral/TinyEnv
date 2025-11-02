@@ -7,6 +7,7 @@
 #include <utils.h>
 #include <InstructionRegistry.h>
 
+
 size_t allocateFileBuffer(FILE* f, char** buf);
 void initializeFileBuffer(FILE* f, char* buf);
 void parseFileBuffer(char* buf, size_t size, IIList* code);

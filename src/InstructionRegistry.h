@@ -6,6 +6,7 @@ typedef Instruction InstructionRegistry[__INS_COUNT];
 void registerInstructions();
 void createInstruction(Instruction* i, InsType type, InstructionCallback callback);
 Instruction* getInstruction(InsType type);
+static InstructionParam EMPTY_PARAM = {.val_type = INSP_NULL};
 
 bool nop_exec(CPU* cpu, InstructionParam* lparam, InstructionParam* rparam);
 bool mva_exec(CPU* cpu, InstructionParam* lparam, InstructionParam* rparam);
@@ -37,3 +38,5 @@ bool dec_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam);
 bool low_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam);
 bool hig_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam);
 bool mrg_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam);
+bool cal_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam);
+bool ret_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam);

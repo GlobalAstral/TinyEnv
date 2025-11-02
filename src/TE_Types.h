@@ -19,7 +19,6 @@ typedef Register Registers[__RG_COUNT];
 
 typedef struct {
   Registers registers;
-  int IP;
   bool FLAG_Z;
   bool FLAG_G;
   bool FLAG_L;

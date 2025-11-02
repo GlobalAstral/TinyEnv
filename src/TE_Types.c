@@ -27,6 +27,9 @@ int printRegister(Reg rg) {
     case RG_SP :
       s = "sp";
       break;
+    case RG_IP :
+      s = "ip";
+      break;
   }
   return printf("%s", s);
 }
@@ -125,6 +128,12 @@ int printII(InstructionInstance *instance) {
     case INS_MRG :
       str = "mrg ";
       break;
+    case INS_CAL :
+      str = "cal ";
+      break;
+    case INS_RET :
+      str = "ret ";
+      break;
   };
   chars += printf("%s", str);
   if (instance->lparam.val_type != INSP_NULL) {
@@ -148,6 +157,7 @@ int parametersNeeded(InsType instruction) {
   switch (instruction) {
     case INS_NOP :
     case INS_HLT :
+    case INS_RET :
       return 0;
     case INS_ADD :
     case INS_SUB :
@@ -178,6 +188,7 @@ int parametersNeeded(InsType instruction) {
     case INS_JRB :
     case INS_INC :
     case INS_DEC :
+    case INS_CAL :
       return 1;
     default:
       return 0;
@@ -186,8 +197,7 @@ int parametersNeeded(InsType instruction) {
 
 CPU createCPU() {
   CPU ret = {
-    .registers = {0}, 
-    .IP = 0, 
+    .registers = {0},
     .FLAG_Z = false,
     .FLAG_ERR = false, 
     .FLAG_G = false,
@@ -206,7 +216,6 @@ void resetCPU(CPU* cpu) {
   cpu->FLAG_HLT = 0;
   cpu->FLAG_L = 0;
   cpu->FLAG_Z = 0;
-  cpu->IP = 0;
   for (int i = 0; i < MEMORY_SIZE; i++) {
     cpu->memory[i] = 0;
     if (i < __RG_COUNT)

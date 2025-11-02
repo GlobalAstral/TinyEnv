@@ -27,9 +27,9 @@ typedef uint_t Literal;
 
 //!   REGISTERS
 typedef enum {
-  RG_A, RG_B, RG_C, RG_D, RG_SI, RG_DI, RG_BP, RG_SP, __RG_COUNT
+  RG_A, RG_B, RG_C, RG_D, RG_SI, RG_DI, RG_BP, RG_SP, RG_IP, __RG_COUNT
 } Reg;
-static char* REGISTERS[] = {"AX", "BX", "CX", "DX", "SI", "DI", "BP", "SP"};
+static char* REGISTERS[] = {"AX", "BX", "CX", "DX", "SI", "DI", "BP", "SP", "IP"};
 static char* registerSelectOptions[__RG_COUNT+1] = {0};
 static char* REGISTERS_LOWER[__RG_COUNT] = {0};
 
@@ -48,7 +48,8 @@ typedef enum {
   INS_XOR, INS_SWP, INS_PSH, INS_POP,
   INS_HLT, INS_SHL, INS_SHR, INS_JRF,
   INS_JRB, INS_INC, INS_DEC, INS_LOW,
-  INS_HIG, INS_MRG, __INS_COUNT
+  INS_HIG, INS_MRG, INS_CAL, INS_RET,
+  __INS_COUNT
 } InsType;
 static char* INSTRUCTIONS[] = {
   "nop", "mva", "mov", "sto", 
@@ -58,7 +59,7 @@ static char* INSTRUCTIONS[] = {
   "xor", "swp", "psh", "pop", 
   "hlt", "shl", "shr", "jrf",
   "jrb", "inc", "dec", "low",
-  "hig", "mrg"
+  "hig", "mrg", "cal", "ret"
 };
 static char* instructionSelectOptions[__INS_COUNT+1] = {0};
 

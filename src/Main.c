@@ -65,9 +65,9 @@ int drawCode(Event* event, CPU* cpu, IIList* code, int padding) {
   for (int i = index; i < index+CODE_MAX_SHOWN; i++) {
     if (i >= code->size) break;
     setCursorPos(padding+1, y);
-    int chars = printf("| %u ", i+1);
+    int chars = printf("| %u ", i);
     chars += printII(&(code->head[i]));
-    if (cpu->IP == i) {
+    if (cpu->registers[RG_IP] == i) {
       chars += printf(" < ");
     }
     if (chars > new_padding)
@@ -334,20 +334,20 @@ int main(int argc, char** argv) {
         cls();
         drawn = false;
       } else if (keycode.ctrl && keycode.key == VK_SPACE) {
-        if (cpu.IP < 0 || cpu.IP >= code.size || cpu.FLAG_ERR || cpu.FLAG_HLT) continue; 
-        InstructionInstance instance = code.head[cpu.IP];
-        cpu.IP = (cpu.IP + 1) % code.size;
+        if (cpu.registers[RG_IP] < 0 || cpu.registers[RG_IP] >= code.size || cpu.FLAG_ERR || cpu.FLAG_HLT) continue; 
+        InstructionInstance instance = code.head[cpu.registers[RG_IP]];
         instance.ins->callback(&cpu, &instance.lparam, &instance.rparam);
+        cpu.registers[RG_IP] = (cpu.registers[RG_IP] + 1) % code.size;
         drawn = false;
       } else if (!keycode.ctrl && keycode.key == VK_SPACE) {
-        for (cpu.IP = 0; (cpu.IP < code.size) && (!cpu.FLAG_ERR && !cpu.FLAG_HLT);) {
-          InstructionInstance instance = code.head[cpu.IP];
-          cpu.IP++;
+        for (cpu.registers[RG_IP] = 0; (cpu.registers[RG_IP] < code.size) && (!cpu.FLAG_ERR && !cpu.FLAG_HLT);) {
+          InstructionInstance instance = code.head[cpu.registers[RG_IP]];
           instance.ins->callback(&cpu, &instance.lparam, &instance.rparam);
+          cpu.registers[RG_IP]++;
           handleRendering(&event, &cpu, &code, &drawn);
           Sleep(BETWEEN_INS_SLEEP);
         }
-        cpu.IP = 0;
+        cpu.registers[RG_IP] = 0;
         drawn = false;
       } else if (keycode.ctrl && keycode.key == VK_R) {
         resetCPU(&cpu);

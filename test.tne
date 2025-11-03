@@ -1,5 +1,52 @@
-jmp .main
+.init
+  #init memory ptr to be 1 so it doesn't get overridden
+  sto 0, 1
+  #goto main
+  jmp .main
+
+.malloc
+  #push stack frame
+  psh bp
+  mov bp, sp
+  #keep ax value
+  mov si, ax
+
+  #push low half of arg
+  low ax, si
+  psh ax
+
+  #push high half of arg
+  hig ax, si
+  psh ax
+
+  #reset si
+  xor si, si
+
+  #get memory ptr
+  mva ax, 0
+  #
+  
+  #pop high and low halves of arg
+  pop bx
+  pop cx
+  #push returned ptr
+  psh ax
+
+  #merge back whole arg
+  mrg bx, cx
+  #move memory ptr
+  add ax, cx
+  #update memory ptr
+  sto 0, ax
+  #pop returned ptr
+  pop ax
+
+  #pop stack frame
+  mov sp, bp
+  pop bp
+  ret
 
 .main
-
-
+  mov ax, 4
+  cal .malloc
+  hlt

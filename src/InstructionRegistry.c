@@ -357,8 +357,8 @@ bool psh_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
   uint_t value = (lparam->val_type == INSP_LITERAL) ? lparam->value.literal : cpu->registers[lparam->value.reg];
   
   Register* sp = &(cpu->registers[RG_SP]);
-  cpu->memory[*sp] = value;
   *sp = *sp - 1;
+  cpu->memory[*sp] = value;
 
   return true;
 }
@@ -375,8 +375,8 @@ bool pop_exec(CPU *cpu, InstructionParam *lparam, InstructionParam *rparam) {
   }
   Register* reg = &(cpu->registers[lparam->value.reg]);
   Register* sp = &(cpu->registers[RG_SP]);
-  *sp = *sp + 1;
   *reg = cpu->memory[*sp];
+  *sp = *sp + 1;
 
   return true;
 }

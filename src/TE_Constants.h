@@ -137,7 +137,11 @@ static char* HELP_PAGES[] = {
   "\tBy starting a line with '" COMMENT_PREFIX "', you can create a comment. Any comment will be ignored.\n"
   "\tYou CANNOT use comments if not at the start of a line.\n"
   "EXAMPLE:\n"
-  "\t" COMMENT_PREFIX " Hello, this is a comment!\n",
+  "\t" COMMENT_PREFIX " Hello, this is a comment!\n"
+  "MACROS:\n"
+  "\tBy starting a word with '" MACRO_PREFIX "', the following text will be a macro.\n"
+  "\tYou can use a macro by prepending '" MACRO_PREFIX "' to its name. It is mandatory to\n"
+  "\t!!!ADD A SPACE OR A NEWLINE AFTER A MACRO USE, AND TO ADD A SPACE BEFORE USE IF IT'S THE FIRST IN LINE!!!\n",
 
   "Each register is a 16-bit register that can hold an unsigned short int.\n"
   "\tAX: A register\n"

@@ -50,3 +50,9 @@ int parametersNeeded(InsType instruction);
 
 CPU createCPU();
 void resetCPU(CPU* cpu);
+
+typedef struct {
+  char name[DEFINE_NAME_MAX];
+  char* define;
+  size_t size;
+} Definition;

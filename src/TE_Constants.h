@@ -6,6 +6,10 @@
 
 #define LABEL_PREFIX "."
 #define COMMENT_PREFIX "#"
+#define MACRO_PREFIX "$"
+#define MACRO_NEWLINE "\\"
+#define DEFINE_MAX 512
+#define DEFINE_NAME_MAX 64
 #define CHAR(T) T[0]
 
 #define INT_SIZE 16

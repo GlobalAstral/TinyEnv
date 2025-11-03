@@ -21,8 +21,66 @@ void initializeFileBuffer(FILE *f, char *buf) {
   buf[base] = 0;
 }
 
-void parseFileBuffer(char *buf, size_t size, IIList* code) {
-  string_list* splitted = split(buf, size, '\n');
+void parseFileBuffer(char *file, size_t size, IIList* code) {
+  int bufferSize = size;
+  char* buffer = (char*)malloc(bufferSize);
+  Definition defines[DEFINE_MAX];
+  int defineIndex = 0;
+  for (int i = 0, bIndex = 0, charsFromNewline = 0; i < size; i++, bIndex++, charsFromNewline++) {
+    char c = file[i];
+    if (c == CHAR(MACRO_PREFIX)) {
+      if (charsFromNewline == 0) {
+        Definition def;
+        int j = 0;
+        while (c != ' ' && j < size && j < DEFINE_NAME_MAX) {
+          def.name[j++] = c;
+          c = file[++i];
+        }
+        def.name[j] = 0;
+        def.define = &(file[i]);
+        def.size = 0;
+        while (c != '\n') {
+          def.size++;
+          c = file[++i];
+        }
+        defines[defineIndex++] = def;
+        buffer[bIndex] = '\n';
+        charsFromNewline = -1;
+      } else {
+        char name[DEFINE_NAME_MAX];
+        int j = 0;
+        while (c != ' ' && c != '\n' && j < size && j < DEFINE_NAME_MAX) {
+          name[j++] = c;
+          c = file[++i];
+        }
+        name[j] = 0;
+        if (c == '\n')
+          i--;
+
+        for (int k = 0; k < defineIndex; k++) {
+          if (strcmp(name, defines[k].name) == 0) {
+            bufferSize += defines[k].size;
+            buffer = realloc(buffer, bufferSize);
+            for (int z = 0; z < defines[k].size; z++) {
+              char dc = defines[k].define[z];
+              if (dc == CHAR(MACRO_NEWLINE))
+                buffer[bIndex++] = '\n';
+              else
+                buffer[bIndex++] = dc;
+            }
+            break;
+          }
+        }
+        bIndex--;
+      }
+    } else { 
+      if (c == '\n')
+        charsFromNewline = -1;
+      buffer[bIndex] = c;
+    }
+  }
+  
+  string_list* splitted = split(buffer, bufferSize, '\n');
   
   listReset(code);
   size_t label_amount = 0;
@@ -84,6 +142,7 @@ void parseFileBuffer(char *buf, size_t size, IIList* code) {
       return;
     listPush(code, instance);
   }
+  free(buffer);
 }
 
 bool substrEqual(char *s, size_t start, size_t end, char *s2) {

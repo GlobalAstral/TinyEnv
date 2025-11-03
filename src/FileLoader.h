@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <utils.h>
 #include <InstructionRegistry.h>
+#include <TE_Types.h>
 #include <TE_Constants.h>
 
 

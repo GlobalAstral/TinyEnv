@@ -186,7 +186,8 @@ static char* HELP_PAGES[] = {
   "\tLOW: Moves the least significant half of a specified register's value into another.\n"
   "\tHIG: Moves the most significant half of a specified register's value into another.\n"
   "\tMRG: Merges the least significant bits of a value with the most significant bits of the specified register's\n"
-  "\tCAL: Pushes return's IP to the stack and jumps to an offset.\n"
+  "\tCAL: Pushes return's IP to the stack and jumps to an offset. Not putting a valid instruction after a CAL\n"
+  "\t\twill result in undefined behaviour. An instruction is MANDATORY.\n"
   "\tRET: Pops return's IP to IP register, returning from an offset.\n",
   
 
